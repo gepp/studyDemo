@@ -1,0 +1,4 @@
+问题：三个线程按顺序打印A、B、C循环10次
+MyThread0 使用sleep 
+Function1 使用的是object的wait notify
+Function2 使用的是ReentrantLock newCondition
