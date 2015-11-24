@@ -1,22 +1,22 @@
 package jdk2010.current.normal;
 
 public class MyThreadMain {
-    public static void main(String[] args) {
-    
-//      MyThread thread=new MyThread();
-//      System.out.println("ä¸»çº¿ç¨‹ï¼š"+Thread.currentThread().getName());
-//      System.out.println("æ–°çº¿ç¨‹:"+thread.getName());
-//      //       thread.run();
-//      //1. run()å’Œå…¶ä»–æ–¹æ³•çš„è°ƒç”¨æ²¡ä»»ä½•ä¸åŒ,mainæ–¹æ³•æŒ‰é¡ºåºæ‰§è¡Œäº†å®ƒ,å¹¶æ‰“å°å‡ºæœ€åä¸€å¥
-//      thread.setDaemon(true);
-//      thread.start();
-//      System.out.println("abc");
-//      System.out.println("ä¸»çº¿ç¨‹ï¼š"+Thread.currentThread().getName());
-//      System.out.println("æ–°çº¿ç¨‹:"+thread.getName());
-        
-        Thread t1=new MyThread();
-        Thread t2=new MyThread();
-        t1.start();
-        t2.start();
-    }
+	public static void main(String[] args) {
+	
+//		MyThread thread=new MyThread();
+//		System.out.println("Ö÷Ïß³Ì£º"+Thread.currentThread().getName());
+//		System.out.println("ĞÂÏß³Ì:"+thread.getName());
+//		//		 thread.run();
+//		//1. run()ºÍÆäËû·½·¨µÄµ÷ÓÃÃ»ÈÎºÎ²»Í¬,main·½·¨°´Ë³ĞòÖ´ĞĞÁËËü,²¢´òÓ¡³ö×îºóÒ»¾ä
+//		thread.setDaemon(true);
+//		thread.start();
+//		System.out.println("abc");
+//		System.out.println("Ö÷Ïß³Ì£º"+Thread.currentThread().getName());
+//		System.out.println("ĞÂÏß³Ì:"+thread.getName());
+		
+		Thread t1=new MyThread();
+		Thread t2=new MyThread();
+		t1.start();
+		t2.start();
+	}
 }

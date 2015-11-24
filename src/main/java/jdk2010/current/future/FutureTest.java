@@ -9,101 +9,101 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class FutureTest {
-        public static void main(String[] args) throws InterruptedException, ExecutionException {
-//          ExecutorService service1=Executors.newFixedThreadPool(5);
-//          FutureTask<String> future=new FutureTask<String>(new FutureCallable());
-//          Future<String> a=service1.submit(new FutureCallable());
-//          Future<String> b=service1.submit(new FutureCallable2());
-//          Future<String> c=  (Future<String>) service1.submit(future);
-//          while(!a.isDone()){
-//              System.out.println("ç­‰å¾…aä¸­");
-//              Thread.sleep(1000);
-//          }
-//          Thread.sleep(6000);
-//          System.out.println("begin-----");
-//          System.out.println(future.get());
-//          String out= a.get()+b.get();
-//          
-//          System.out.println("out:"+out);
-            
-            //****ä»¥ä¸‹ç»„è£…å¤šçº¿ç¨‹ å­—ç¬¦ä¸²ç›¸åŠ 
-//          ExecutorService service1=Executors.newFixedThreadPool(5);
-//          Future<String> numFuture;
-//          ArrayList<Future<String>> list=new ArrayList<Future<String>>();
-//          for(int i=1;i<=100;i++){
-//              numFuture=service1.submit(new NumberFutureCallable(i+""));
-//              list.add(numFuture);
-//          }
-//          System.out.println("list.size()"+list.size());
-//          
-//          String total="";
-//          while(true){
-//          Iterator<Future<String>> iterator=list.iterator();
-//          while(iterator.hasNext()){
-//              Future<String> f=iterator.next();
-//              if(f.isDone()){
-//                  System.out.println("f.get():"+f.get());
-//                  total=total+":"+f.get();
-//                  System.out.println("total:"+total);
-//                  iterator.remove();
-//              }else{
-//                  Thread.sleep(200);
-//                  System.out.println("æœªè®¡ç®—ï¼Œå‰©ä½™çº¿ç¨‹æ•°:"+list.size());
-//                  continue;
-//              }
-//          }
-//          if(list.size()==0){
-//              service1.shutdown();
-//          }
-//          }
-            //****ä»¥ä¸‹ç»„è£…å¤šçº¿ç¨‹ å­—ç¬¦ä¸²ç›¸åŠ 
-            ExecutorService service1=Executors.newFixedThreadPool(5);
-            FpkjFutureTask numFuture;
-            ArrayList<Future<String>> list=new ArrayList<Future<String>>();
-            ArrayList<String> unokList=new ArrayList<String>();
-            for(int i=1;i<=100;i++){
-                numFuture=new FpkjFutureTask(new NumberFutureCallable(i+""));
-                numFuture.setEncodeStr(i+"");
-                service1.submit(numFuture);
-                list.add(numFuture);
-            }
-            String total="";
-            while(true){
-            Iterator<Future<String>> iterator=list.iterator();
-            while(iterator.hasNext()){
-                FpkjFutureTask f=(FpkjFutureTask)iterator.next();
-                if(f.isDone()){
-                    System.out.println("f.get():"+f.get());
-                    total=total+":"+f.get();
-                    System.out.println("total:"+total);
-                    iterator.remove();
-                }else{
-                    String s="";
-                    try{
-                        s=f.get(5,TimeUnit.SECONDS);
-                        total=total+":"+f.get();
-                        
-                    }catch(Exception e){
-                        System.out.println("5ç§’è¶…æ—¶ï¼Œè¿›å…¥ç³»ç»Ÿå›žæ”¶");
-                        unokList.add(f.getEncodeStr());
-                    }finally{
-                        iterator.remove();
-                    }
-                    System.out.println("æœªè®¡ç®—ï¼Œå‰©ä½™çº¿ç¨‹æ•°:"+list.size());
-                     
-                }
-            }
-            if(list.size()==0){
-                
-                service1.shutdown();
-                System.out.println("æœªå®Œæˆlist---->");
-                for(String s:unokList){
-                    System.out.println(s);
-                }
-                break;
-            }
-            }
-            
-        }
-         
+		public static void main(String[] args) throws InterruptedException, ExecutionException {
+//			ExecutorService service1=Executors.newFixedThreadPool(5);
+//			FutureTask<String> future=new FutureTask<String>(new FutureCallable());
+//			Future<String> a=service1.submit(new FutureCallable());
+//			Future<String> b=service1.submit(new FutureCallable2());
+//			Future<String> c=  (Future<String>) service1.submit(future);
+//			while(!a.isDone()){
+//				System.out.println("µÈ´ýaÖÐ");
+//				Thread.sleep(1000);
+//			}
+//			Thread.sleep(6000);
+//			System.out.println("begin-----");
+//			System.out.println(future.get());
+// 			String out=	a.get()+b.get();
+//			
+//			System.out.println("out:"+out);
+			
+			//****ÒÔÏÂ×é×°¶àÏß³Ì ×Ö·û´®Ïà¼Ó
+//			ExecutorService service1=Executors.newFixedThreadPool(5);
+//			Future<String> numFuture;
+//			ArrayList<Future<String>> list=new ArrayList<Future<String>>();
+//			for(int i=1;i<=100;i++){
+//				numFuture=service1.submit(new NumberFutureCallable(i+""));
+//				list.add(numFuture);
+//			}
+//			System.out.println("list.size()"+list.size());
+//			
+//			String total="";
+//			while(true){
+//			Iterator<Future<String>> iterator=list.iterator();
+//			while(iterator.hasNext()){
+//				Future<String> f=iterator.next();
+// 				if(f.isDone()){
+//					System.out.println("f.get():"+f.get());
+//					total=total+":"+f.get();
+//					System.out.println("total:"+total);
+//					iterator.remove();
+//				}else{
+// 					Thread.sleep(200);
+//					System.out.println("Î´¼ÆËã£¬Ê£ÓàÏß³ÌÊý:"+list.size());
+//					continue;
+// 				}
+//			}
+//			if(list.size()==0){
+//				service1.shutdown();
+//			}
+//			}
+			//****ÒÔÏÂ×é×°¶àÏß³Ì ×Ö·û´®Ïà¼Ó
+			ExecutorService service1=Executors.newFixedThreadPool(5);
+			FpkjFutureTask numFuture;
+			ArrayList<Future<String>> list=new ArrayList<Future<String>>();
+			ArrayList<String> unokList=new ArrayList<String>();
+			for(int i=1;i<=100;i++){
+				numFuture=new FpkjFutureTask(new NumberFutureCallable(i+""));
+				numFuture.setEncodeStr(i+"");
+				service1.submit(numFuture);
+				list.add(numFuture);
+			}
+			String total="";
+			while(true){
+			Iterator<Future<String>> iterator=list.iterator();
+			while(iterator.hasNext()){
+				FpkjFutureTask f=(FpkjFutureTask)iterator.next();
+ 				if(f.isDone()){
+					System.out.println("f.get():"+f.get());
+					total=total+":"+f.get();
+					System.out.println("total:"+total);
+					iterator.remove();
+				}else{
+  					String s="";
+  					try{
+  						s=f.get(5,TimeUnit.SECONDS);
+  						total=total+":"+f.get();
+  						
+  					}catch(Exception e){
+  						System.out.println("5Ãë³¬Ê±£¬½øÈëÏµÍ³»ØÊÕ");
+  						unokList.add(f.getEncodeStr());
+  					}finally{
+  						iterator.remove();
+  					}
+					System.out.println("Î´¼ÆËã£¬Ê£ÓàÏß³ÌÊý:"+list.size());
+					 
+ 				}
+			}
+			if(list.size()==0){
+				
+				service1.shutdown();
+				System.out.println("Î´Íê³Élist---->");
+				for(String s:unokList){
+					System.out.println(s);
+				}
+				break;
+			}
+			}
+			
+		}
+		 
 }

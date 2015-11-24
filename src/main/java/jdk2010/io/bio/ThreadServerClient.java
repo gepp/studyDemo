@@ -8,49 +8,50 @@ import java.util.UUID;
 
 public class ThreadServerClient extends Thread {
 
-    private Socket client;
+	private Socket client;
 
-    public ThreadServerClient(Socket socket) {
-        this.client = socket;
-        System.out.println("ËØ∑Ê±Ç----"+socket.getRemoteSocketAddress());
-        start();
-    }
+	public ThreadServerClient(Socket socket) {
+		this.client = socket;
+		System.out.println("«Î«Û----"+socket.getRemoteSocketAddress());
+		start();
+	}
 
-    @Override
-    public void run() {
-        try {
-            InputStream in = client.getInputStream();
-            OutputStream out = client.getOutputStream();
-            byte[] b = new byte[1024];
-            int length = 0;
-            String s = "";
+	@Override
+	public void run() {
+		try {
+			InputStream in = client.getInputStream();
+			OutputStream out = client.getOutputStream();
+			byte[] b = new byte[1024];
+			int length = 0;
+			String s = "";
 
-            while ((length = in.read(b)) != -1) {
-                s = s + new String(b, 0, length);
+			while ((length = in.read(b)) != -1) {
+				s = s + new String(b, 0, length);
 
-            }
-            System.out.println("ÂÆ¢Êà∑Á´ØËØ∑Ê±ÇÔºö" + s);
-            if(s.equals("1")){
-                Thread.sleep(3000);
-            }else if(s.equals("2")){
-                Thread.sleep(1000);
-            }
-            out.write((s+":"+UUID.randomUUID().toString()).getBytes());
-             out.close();
-             in.close();
+			}
+			System.out.println("øÕªß∂À«Î«Û£∫" + s);
+//			if(s.equals("1")){
+//				Thread.sleep(3000);
+//			}else if(s.equals("2")){
+//				Thread.sleep(1000);
+//			}
+			 out.write((s+":"+UUID.randomUUID().toString()).getBytes());
+			 out.close();
+			 in.close();
  
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-            System.out.println("ÊúçÂä°Âô®ËøûÊé•Ë∂ÖÊó∂:" + e.getMessage());
-        } finally {
-            if (!client.isClosed()) {
-                try {
-                    client.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+			System.out.println("∑˛ŒÒ∆˜¡¨Ω”≥¨ ±:" + e.getMessage());
+		} finally {
+			System.out.println("πÿ±’");
+			if (!client.isClosed()) {
+				try {
+					client.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

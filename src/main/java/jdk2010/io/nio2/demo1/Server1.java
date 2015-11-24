@@ -30,10 +30,10 @@ public class Server1 {
     }
      
     public Server1() throws IOException{
-        readPool = Executors.newFixedThreadPool(5);
-        System.out.println("è¯»çº¿ç¨‹æ± å¯åŠ¨ï¼Œå¤§å°ä¸º5...");
-        writePool= Executors.newFixedThreadPool(5);
-        System.out.println("å†™çº¿ç¨‹æ± å¯åŠ¨ï¼Œå¤§å°ä¸º5...");
+    	readPool = Executors.newFixedThreadPool(5);
+    	System.out.println("¶ÁÏß³Ì³ØÆô¶¯£¬´óĞ¡Îª5...");
+    	writePool= Executors.newFixedThreadPool(5);
+    	System.out.println("Ğ´Ïß³Ì³ØÆô¶¯£¬´óĞ¡Îª5...");
         serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.configureBlocking(false);
         ServerSocket ss = serverSocketChannel.socket();
@@ -49,7 +49,7 @@ public class Server1 {
                 n = selector.select();
                 System.out.println("abc================");
             }catch (IOException e) {
-                throw new RuntimeException("Selector.select()å¼‚å¸¸!");
+                throw new RuntimeException("Selector.select()Òì³£!");
             }
             if(n==0)
             {
@@ -66,7 +66,7 @@ public class Server1 {
                     try{
                         sc = ((ServerSocketChannel)key.channel()).accept();
                         sc.configureBlocking(false);
-                        System.out.println("å®¢æˆ·ç«¯:"+sc.socket().getInetAddress().getHostAddress()+"å·²è¿æ¥");
+                        System.out.println("¿Í»§¶Ë:"+sc.socket().getInetAddress().getHostAddress()+"ÒÑÁ¬½Ó");
                         sc.register(selector, SelectionKey.OP_READ);
                     }catch (Exception e) {
                         try{
@@ -103,22 +103,22 @@ public class Server1 {
             receiveBuffer.clear();
             int len = 0;
             try{
-                while((len=client.read(receiveBuffer))>0){//éé˜»å¡ï¼Œç«‹åˆ»è¯»å–ç¼“å†²åŒºå¯ç”¨å­—èŠ‚
-                    receiveBuffer.flip();
-                    String receiveStr=charset.decode(receiveBuffer).toString();
-                    System.out.println("å®¢æˆ·ç«¯è¯·æ±‚æ•°æ®ï¼š"+receiveStr);
+                while((len=client.read(receiveBuffer))>0){//·Ç×èÈû£¬Á¢¿Ì¶ÁÈ¡»º³åÇø¿ÉÓÃ×Ö½Ú
+                	receiveBuffer.flip();
+                	String receiveStr=charset.decode(receiveBuffer).toString();
+                    System.out.println("¿Í»§¶ËÇëÇóÊı¾İ£º"+receiveStr);
                     client.register(selector, SelectionKey.OP_WRITE,receiveStr);
                  }
                 if(len==-1){
-                    System.out.println("readæ“ä½œç»“æŸã€‚ã€‚ã€‚");
-                   // client.close();  //ä¸å¿…å…³é—­
+                	System.out.println("read²Ù×÷½áÊø¡£¡£¡£");
+                   // client.close();  //²»±Ø¹Ø±Õ
                 }
-                //æ²¡æœ‰å¯ç”¨å­—èŠ‚,ç»§ç»­ç›‘å¬OP_READ
+                //Ã»ÓĞ¿ÉÓÃ×Ö½Ú,¼ÌĞø¼àÌıOP_READ
                 key.interestOps(key.interestOps()|SelectionKey.OP_READ);
                 key.selector().wakeup();
             }catch (Exception e) {
                 try {
-                    client.close();
+                	client.close();
                 } catch (IOException e1) {
                 }
             }
@@ -139,21 +139,21 @@ public class Server1 {
         public void run() {
             SocketChannel client = (SocketChannel)key.channel();
             try{
-                String sendMsg=key.attachment()+"";
-                    System.out.println("readè¯»å–æ•°æ®:"+sendMsg);
+             	String sendMsg=key.attachment()+"";
+                    System.out.println("read¶ÁÈ¡Êı¾İ:"+sendMsg);
                     sendbuffer.clear();
-                    //åŒ…è£…ä¸€ä¸‹
+                    //°ü×°Ò»ÏÂ
                     sendbuffer.put((sendMsg+"-->thread").getBytes());
                     sendbuffer.flip();
                     client.write(sendbuffer);
-                    System.out.println("è¿”å›æ•°æ®:"+sendMsg+"-->write");
+                    System.out.println("·µ»ØÊı¾İ:"+sendMsg+"-->write");
                     client.close();
-                 //æ²¡æœ‰å¯ç”¨å­—èŠ‚,ç»§ç»­ç›‘å¬OP_WRITE
+                 //Ã»ÓĞ¿ÉÓÃ×Ö½Ú,¼ÌĞø¼àÌıOP_WRITE
                key.interestOps(key.interestOps()|SelectionKey.OP_WRITE);
                 key.selector().wakeup();
             }catch (Exception e) {
                 try {
-                    client.close();
+                	client.close();
                 } catch (IOException e1) {
                 }
             }

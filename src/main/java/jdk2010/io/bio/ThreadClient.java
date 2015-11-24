@@ -8,45 +8,45 @@ import java.util.UUID;
 
 public class ThreadClient extends Thread {
 
-    private Socket client;
-    private int current;
-    public ThreadClient (Socket socket,int current) {
-        this.client = socket;
-        this.current=current;
-        System.out.println("å®¢æˆ·ç«¯å‘é€è¯·æ±‚----"+socket.getRemoteSocketAddress());
-        start();
-    }
+	private Socket client;
+	private int current;
+	public ThreadClient (Socket socket,int current) {
+		this.client = socket;
+		this.current=current;
+		System.out.println("¿Í»§¶Ë·¢ËÍÇëÇó----"+socket.getRemoteSocketAddress());
+		start();
+	}
 
-    @Override
-    public void run() {
-        try {
-            InputStream in=client.getInputStream();
-            OutputStream out=client.getOutputStream();
-             
-            out.write((current+"").getBytes());
-            client.shutdownOutput();
-            byte[] b=new byte[1024];
-            int length=0;
-            String s="";
-            while((length=in.read(b))!=-1){
-                s=s+new String(b,0,length);
-            }
-            System.out.println("æœåŠ¡ç«¯è¿”å›ï¼š"+s);
-            out.close();
-            in.close();
+	@Override
+	public void run() {
+		try {
+			InputStream in=client.getInputStream();
+			OutputStream out=client.getOutputStream();
+			 
+	 		out.write((current+"").getBytes());
+	  		client.shutdownOutput();
+	 		byte[] b=new byte[1024];
+			int length=0;
+			String s="";
+			while((length=in.read(b))!=-1){
+				s=s+new String(b,0,length);
+			}
+ 			System.out.println("·şÎñ¶Ë·µ»Ø£º"+s);
+			out.close();
+			in.close();
  
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-            System.out.println("æœåŠ¡å™¨è¿æ¥è¶…æ—¶:" + e.getMessage());
-        } finally {
-            if (!client.isClosed()) {
-                try {
-                    client.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+			System.out.println("·şÎñÆ÷Á¬½Ó³¬Ê±:" + e.getMessage());
+		} finally {
+			if (!client.isClosed()) {
+				try {
+					client.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

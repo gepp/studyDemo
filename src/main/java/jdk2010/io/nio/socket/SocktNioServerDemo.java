@@ -11,71 +11,71 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
-//è¿™æ˜¯æœ€ç®€å•çš„å•Reactorå•çº¿ç¨‹æ¨¡å‹
+//ÕâÊÇ×î¼òµ¥µÄµ¥Reactorµ¥Ïß³ÌÄ£ĞÍ
 public class SocktNioServerDemo {
-    private static  Selector selector;
+	private static  Selector selector;
    
-    private  int BLOCK = 4096;
-    
+	private  int BLOCK = 4096;
+	
     private  int flag = 0;
     
     private int keysLength;
 
     int totalCount;
 
-      /*æ¥å—æ•°æ®ç¼“å†²åŒº*/
+	  /*½ÓÊÜÊı¾İ»º³åÇø*/
     private  ByteBuffer sendbuffer = ByteBuffer.allocate(BLOCK);
-    /*å‘é€æ•°æ®ç¼“å†²åŒº*/
+    /*·¢ËÍÊı¾İ»º³åÇø*/
     private  ByteBuffer receivebuffer = ByteBuffer.allocate(BLOCK);
-    
+	
     public SocktNioServerDemo(int port) throws IOException {
-        // æ‰“å¼€æœåŠ¡å™¨å¥—æ¥å­—é€šé“
+        // ´ò¿ª·şÎñÆ÷Ì×½Ó×ÖÍ¨µÀ
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-        // æœåŠ¡å™¨é…ç½®ä¸ºéé˜»å¡
+        // ·şÎñÆ÷ÅäÖÃÎª·Ç×èÈû
         serverSocketChannel.configureBlocking(false);
-        // æ£€ç´¢ä¸æ­¤é€šé“å…³è”çš„æœåŠ¡å™¨å¥—æ¥å­—
+        // ¼ìË÷Óë´ËÍ¨µÀ¹ØÁªµÄ·şÎñÆ÷Ì×½Ó×Ö
         ServerSocket serverSocket = serverSocketChannel.socket();
-        // è¿›è¡ŒæœåŠ¡çš„ç»‘å®š
+        // ½øĞĞ·şÎñµÄ°ó¶¨
         serverSocket.bind(new InetSocketAddress(port));
-        // é€šè¿‡open()æ–¹æ³•æ‰¾åˆ°Selector,Selectorå†…éƒ¨åŸç†å®é™…æ˜¯åœ¨åšä¸€ä¸ªå¯¹æ‰€æ³¨å†Œçš„channelçš„è½®è¯¢è®¿é—®
+        // Í¨¹ıopen()·½·¨ÕÒµ½Selector,SelectorÄÚ²¿Ô­ÀíÊµ¼ÊÊÇÔÚ×öÒ»¸ö¶ÔËù×¢²áµÄchannelµÄÂÖÑ¯·ÃÎÊ
         selector = Selector.open();
-        //å‘Selectoræ³¨å†ŒChannelåŠæˆ‘ä»¬æœ‰å…´è¶£çš„äº‹ä»¶,ç­‰å¾…è¿æ¥
+        //ÏòSelector×¢²áChannel¼°ÎÒÃÇÓĞĞËÈ¤µÄÊÂ¼ş,µÈ´ıÁ¬½Ó
         SelectionKey s = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-        System.out.println("===æœåŠ¡å™¨SelectionKey===");
+        System.out.println("===·şÎñÆ÷SelectionKey===");
          System.out.println("Server Start----8080:");
     }
     
     
-    public static void main(String[] args) throws Exception {
-            int port = 8080;
-            SocktNioServerDemo server = new SocktNioServerDemo(port);
-            server.listen();
-    }
+	public static void main(String[] args) throws Exception {
+		  	int port = 8080;
+		  	SocktNioServerDemo server = new SocktNioServerDemo(port);
+	        server.listen();
+	}
 
-    private static String receive(SocketChannel socketChannel) throws Exception {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int length = 0;
-        String username = "";
-        while ((length = socketChannel.read(buffer)) != -1) {
-            buffer.flip();
-            username = username
-                    + Charset.forName("UTF-8").decode(buffer).toString();
-            buffer.clear();
-        }
+	private static String receive(SocketChannel socketChannel) throws Exception {
+		ByteBuffer buffer = ByteBuffer.allocate(1024);
+		int length = 0;
+		String username = "";
+		while ((length = socketChannel.read(buffer)) != -1) {
+			buffer.flip();
+			username = username
+					+ Charset.forName("UTF-8").decode(buffer).toString();
+			buffer.clear();
+		}
 
-        return username;
+		return username;
 
-    }
+	}
 
-    // å‘é€æ•°æ®
-    private static void send(String username, SocketChannel socketChannel)
-            throws Exception {
-        System.out.println("è¿”å›ï¼š"+username);
-        ByteBuffer buffer = ByteBuffer.wrap(username.getBytes("utf-8"));
-        socketChannel.write(buffer);
-        socketChannel.socket().shutdownOutput();
-    }
-    private static void printKeyInfo(SelectionKey sk) {
+	// ·¢ËÍÊı¾İ
+	private static void send(String username, SocketChannel socketChannel)
+			throws Exception {
+		System.out.println("·µ»Ø£º"+username);
+		ByteBuffer buffer = ByteBuffer.wrap(username.getBytes("utf-8"));
+		socketChannel.write(buffer);
+		socketChannel.socket().shutdownOutput();
+	}
+	private static void printKeyInfo(SelectionKey sk) {
 //        String s = new String();
 // 
 //        s = "Att: " + (sk.attachment() == null ? "no" : "yes");
@@ -90,14 +90,14 @@ public class SocktNioServerDemo {
 //        System.out.println(s);
     }
  
-    
-      // ç›‘å¬
+	
+	  // ¼àÌı
     private void listen() throws IOException {
         while (true) {
-            // é€‰æ‹©ä¸€ç»„é”®ï¼Œå¹¶ä¸”ç›¸åº”çš„é€šé“å·²ç»æ‰“å¼€
-            keysLength=selector.select();
-            if(keysLength>0){
-            // è¿”å›æ­¤é€‰æ‹©å™¨çš„å·²é€‰æ‹©é”®é›†ã€‚
+            // Ñ¡ÔñÒ»×é¼ü£¬²¢ÇÒÏàÓ¦µÄÍ¨µÀÒÑ¾­´ò¿ª
+        	keysLength=selector.select();
+        	if(keysLength>0){
+            // ·µ»Ø´ËÑ¡ÔñÆ÷µÄÒÑÑ¡Ôñ¼ü¼¯¡£
             Set<SelectionKey> selectionKeys = selector.selectedKeys();
             Iterator<SelectionKey> iterator = selectionKeys.iterator();
             while (iterator.hasNext()) {
@@ -106,71 +106,71 @@ public class SocktNioServerDemo {
                  iterator.remove();
                 handleKey(selectionKey);
             }
-            }else{
-                System.out.println("Select finished without any keys.");
-            }
+        	}else{
+        		System.out.println("Select finished without any keys.");
+        	}
         }
     }
-    // å¤„ç†è¯·æ±‚
+    // ´¦ÀíÇëÇó
     private void handleKey(SelectionKey selectionKey) throws IOException {
-        // æ¥å—è¯·æ±‚
-        totalCount++;
-        System.out.println("totalCount:"+totalCount);
+        // ½ÓÊÜÇëÇó
+    	totalCount++;
+    	System.out.println("totalCount:"+totalCount);
         ServerSocketChannel server = null;
         SocketChannel client = null;
         String receiveText;
         String sendText;
         int count=0;
         
-        // æµ‹è¯•æ­¤é”®çš„é€šé“æ˜¯å¦å·²å‡†å¤‡å¥½æ¥å—æ–°çš„å¥—æ¥å­—è¿æ¥ã€‚
+        // ²âÊÔ´Ë¼üµÄÍ¨µÀÊÇ·ñÒÑ×¼±¸ºÃ½ÓÊÜĞÂµÄÌ×½Ó×ÖÁ¬½Ó¡£
         if (selectionKey.isAcceptable()) {
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
-            System.out.println("å½“å‰threadé•¿åº¦ï¼š"+Thread.activeCount());
+            // ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
+        	System.out.println("µ±Ç°thread³¤¶È£º"+Thread.activeCount());
             server = (ServerSocketChannel) selectionKey.channel();
-            // æ¥å—åˆ°æ­¤é€šé“å¥—æ¥å­—çš„è¿æ¥ã€‚
-            // æ­¤æ–¹æ³•è¿”å›çš„å¥—æ¥å­—é€šé“ï¼ˆå¦‚æœæœ‰ï¼‰å°†å¤„äºé˜»å¡æ¨¡å¼ã€‚
+            // ½ÓÊÜµ½´ËÍ¨µÀÌ×½Ó×ÖµÄÁ¬½Ó¡£
+            // ´Ë·½·¨·µ»ØµÄÌ×½Ó×ÖÍ¨µÀ£¨Èç¹ûÓĞ£©½«´¦ÓÚ×èÈûÄ£Ê½¡£
             client = server.accept();
-            // é…ç½®ä¸ºéé˜»å¡
+            // ÅäÖÃÎª·Ç×èÈû
             client.configureBlocking(false);
-            // æ³¨å†Œåˆ°selectorï¼Œç­‰å¾…è¿æ¥
+            // ×¢²áµ½selector£¬µÈ´ıÁ¬½Ó
             client.register(selector, SelectionKey.OP_READ,"abc");
         } else if (selectionKey.isReadable()) {
-            System.out.println("read:"+selectionKey.attachment());
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
+        	System.out.println("read:"+selectionKey.attachment());
+            // ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
             client = (SocketChannel) selectionKey.channel();
-            //å°†ç¼“å†²åŒºæ¸…ç©ºä»¥å¤‡ä¸‹æ¬¡è¯»å–
+            //½«»º³åÇøÇå¿ÕÒÔ±¸ÏÂ´Î¶ÁÈ¡
             receivebuffer.clear();
-            //è¯»å–æœåŠ¡å™¨å‘é€æ¥çš„æ•°æ®åˆ°ç¼“å†²åŒºä¸­
+            //¶ÁÈ¡·şÎñÆ÷·¢ËÍÀ´µÄÊı¾İµ½»º³åÇøÖĞ
             count = client.read(receivebuffer);
             if (count > 0) {
                 receiveText = new String( receivebuffer.array(),0,count);
-                System.out.println("æœåŠ¡å™¨ç«¯æ¥å—å®¢æˆ·ç«¯æ•°æ®--:"+receiveText);
+                System.out.println("·şÎñÆ÷¶Ë½ÓÊÜ¿Í»§¶ËÊı¾İ--:"+receiveText);
                 
                 client.register(selector, SelectionKey.OP_WRITE,receiveText);
             }else{
-                System.out.println("readè¿æ¥å…³é—­");
-                client.close();
+            	System.out.println("readÁ¬½Ó¹Ø±Õ");
+            	client.close();
             }
         } else if (selectionKey.isWritable()) {
-            System.out.println("write:"+selectionKey.attachment());
-            //å°†ç¼“å†²åŒºæ¸…ç©ºä»¥å¤‡ä¸‹æ¬¡å†™å…¥
+        	System.out.println("write:"+selectionKey.attachment());
+        	//½«»º³åÇøÇå¿ÕÒÔ±¸ÏÂ´ÎĞ´Èë
             sendbuffer.clear();
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
+            // ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
             client = (SocketChannel) selectionKey.channel();
             sendText="message from server--" + flag++;
-            //å‘ç¼“å†²åŒºä¸­è¾“å…¥æ•°æ®
+            //Ïò»º³åÇøÖĞÊäÈëÊı¾İ
             sendbuffer.put(sendText.getBytes());
-             //å°†ç¼“å†²åŒºå„æ ‡å¿—å¤ä½,å› ä¸ºå‘é‡Œé¢putäº†æ•°æ®æ ‡å¿—è¢«æ”¹å˜è¦æƒ³ä»ä¸­è¯»å–æ•°æ®å‘å‘æœåŠ¡å™¨,å°±è¦å¤ä½
+             //½«»º³åÇø¸÷±êÖ¾¸´Î»,ÒòÎªÏòÀïÃæputÁËÊı¾İ±êÖ¾±»¸Ä±äÒªÏë´ÓÖĞ¶ÁÈ¡Êı¾İ·¢Ïò·şÎñÆ÷,¾ÍÒª¸´Î»
             sendbuffer.flip();
-            //è¾“å‡ºåˆ°é€šé“
+            //Êä³öµ½Í¨µÀ
             client.write(sendbuffer);
-            System.out.println("æœåŠ¡å™¨ç«¯å‘å®¢æˆ·ç«¯å‘é€æ•°æ®--ï¼š"+sendText);
+            System.out.println("·şÎñÆ÷¶ËÏò¿Í»§¶Ë·¢ËÍÊı¾İ--£º"+sendText);
             client.close();
            // client.register(selector, SelectionKey.OP_READ);
         }else if(selectionKey.isConnectable()){
-            // è¾“å…¥ç»“æŸï¼Œå…³é—­ socketChannel
-            System.out.println(selectionKey.attachment()+ " å·²å…³é—­è¿æ¥");
-            client.close();
+        	// ÊäÈë½áÊø£¬¹Ø±Õ socketChannel
+        	System.out.println(selectionKey.attachment()+ " ÒÑ¹Ø±ÕÁ¬½Ó");
+        	client.close();
         }
     }
 

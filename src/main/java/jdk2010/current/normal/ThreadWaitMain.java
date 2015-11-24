@@ -1,19 +1,19 @@
 package jdk2010.current.normal;
 
 public class ThreadWaitMain {
-    public static void main(String[] args) throws InterruptedException {
-        ThreadWaitTest t1=new ThreadWaitTest();
-         synchronized(t1) {
-                // å¯åŠ¨â€œçº¿ç¨‹t1â€
-                //System.out.println(Thread.currentThread().getName()+" start t1");
-                t1.start();
-                t1.join();
-                for(int i=0;i<100;i++)
-                System.out.println("main---");
-                // ä¸»çº¿ç¨‹ç­‰å¾…t1é€šè¿‡notify()å”¤é†’ã€‚
-                //t1.wait();
+	public static void main(String[] args) throws InterruptedException {
+		ThreadWaitTest t1=new ThreadWaitTest();
+		 synchronized(t1) {
+	            // Æô¶¯¡°Ïß³Ìt1¡±
+				//System.out.println(Thread.currentThread().getName()+" start t1");
+				t1.start();
+				t1.join();
+				for(int i=0;i<100;i++)
+				System.out.println("main---");
+				// Ö÷Ïß³ÌµÈ´ıt1Í¨¹ınotify()»½ĞÑ¡£
+ 				//t1.wait();
 
-                System.out.println(Thread.currentThread().getName()+" continue");
-            }
-    }
+				System.out.println(Thread.currentThread().getName()+" continue");
+	        }
+	}
 }

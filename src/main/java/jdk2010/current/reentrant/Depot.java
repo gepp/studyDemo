@@ -5,64 +5,64 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Depot {
-    private int store;
-    public void setStore(int store) {
-        this.store = store;
-    }
-    private int capacity;
-    private Lock lock;
-    private Condition addCondition;
-    private Condition substractCondition;
-    
-    public Depot(){
-        this.store=0;
-        this.capacity=1000;
-        lock=new ReentrantLock();
-        addCondition=lock.newCondition();
-        substractCondition=lock.newCondition();
-    }
-    
-    public void add(int count){
-        try{
-        lock.lock();
-         if((count+store)>=capacity){
-             System.out.println(Thread.currentThread().getName()+"å·²æ»¡");
-             addCondition.await();
-             System.out.println(Thread.currentThread().getName()+"aaaaaa");
-         }
-         int old=store;
-         store=store+count;
-         System.out.println(Thread.currentThread().getName()+"åº“å­˜:"+old+"å¢åŠ "+count+"åï¼š"+store);
-         substractCondition.signal();
-        }catch(Exception e){
-            
-        }finally{
-            lock.unlock();
-        }
-        
-    }
-    public void subtract(int count){
-        try{
-        lock.lock();
-         if((store-count)<=0){
-             System.out.println(Thread.currentThread().getName()+"åº“å­˜ä¸è¶³,ç­‰å¾…ç”Ÿäº§");
-             substractCondition.await();
-             System.out.println(Thread.currentThread().getName()+"bbbbbb");
-         }
-         
-         int old=store;
-         store=store-count;
-         System.out.println(Thread.currentThread().getName()+"åº“å­˜:"+old+"å‡å°‘"+count+"åï¼š"+store);
-         addCondition.signal();
-        }catch(Exception e){
-            
-        }finally{
-            lock.unlock();
-        }
-        
-    }
-    public int getStore(){
-        return store;
-    }
-    
+	private int store;
+	public void setStore(int store) {
+		this.store = store;
+	}
+	private int capacity;
+	private Lock lock;
+	private Condition addCondition;
+	private Condition substractCondition;
+	
+	public Depot(){
+		this.store=0;
+		this.capacity=1000;
+		lock=new ReentrantLock();
+		addCondition=lock.newCondition();
+		substractCondition=lock.newCondition();
+	}
+	
+	public void add(int count){
+		try{
+		lock.lock();
+		 if((count+store)>=capacity){
+			 System.out.println(Thread.currentThread().getName()+"ÒÑÂú");
+			 addCondition.await();
+			 System.out.println(Thread.currentThread().getName()+"aaaaaa");
+		 }
+		 int old=store;
+		 store=store+count;
+		 System.out.println(Thread.currentThread().getName()+"¿â´æ:"+old+"Ôö¼Ó"+count+"ºó£º"+store);
+		 substractCondition.signal();
+		}catch(Exception e){
+			
+		}finally{
+			lock.unlock();
+		}
+		
+	}
+	public void subtract(int count){
+ 		try{
+		lock.lock();
+		 if((store-count)<=0){
+			 System.out.println(Thread.currentThread().getName()+"¿â´æ²»×ã,µÈ´ıÉú²ú");
+			 substractCondition.await();
+			 System.out.println(Thread.currentThread().getName()+"bbbbbb");
+		 }
+		 
+		 int old=store;
+		 store=store-count;
+		 System.out.println(Thread.currentThread().getName()+"¿â´æ:"+old+"¼õÉÙ"+count+"ºó£º"+store);
+		 addCondition.signal();
+ 		}catch(Exception e){
+			
+		}finally{
+			lock.unlock();
+		}
+		
+	}
+	public int getStore(){
+		return store;
+	}
+	
 }

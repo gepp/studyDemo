@@ -14,7 +14,7 @@ public class Acceptor implements Runnable {
     public void run() {
         try {
             SocketChannel socketChannel = reactor.serverSocketChannel.accept();
-            if (socketChannel != null)// 璋冪敤Handler鏉ュ鐞哻hannel
+            if (socketChannel != null)// 调用Handler来处理channel
                 new SocketReadHandler(reactor.selector, socketChannel);
         } catch (IOException e) {
             e.printStackTrace();

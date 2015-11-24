@@ -7,6 +7,7 @@ public class ThreadWaitTest extends Thread{
 		System.out.println("t1---start");
 		synchronized (this) {
             System.out.println(Thread.currentThread().getName()+" call notify()");
+            // 唤醒当前的wait线程
             notify();
         }
 	}

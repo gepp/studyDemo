@@ -13,125 +13,125 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-//è¿™æ˜¯æœ€ç®€å•çš„å•Reactorå•çº¿ç¨‹æ¨¡å‹
+//ÕâÊÇ×î¼òµ¥µÄµ¥Reactorµ¥Ïß³ÌÄ£ĞÍ
 public class SocktNioServerDemo {
-    private static Selector selector;
-    private int BLOCK = 4096;
-    private int flag = 0;
-    int totalCount;
-    int keysLength;
-    /* æ¥å—æ•°æ®ç¼“å†²åŒº */
-    private ByteBuffer sendbuffer = ByteBuffer.allocate(BLOCK);
-    /* å‘é€æ•°æ®ç¼“å†²åŒº */
-    private ByteBuffer receivebuffer = ByteBuffer.allocate(BLOCK);
+	private static Selector selector;
+	private int BLOCK = 4096;
+	private int flag = 0;
+	int totalCount;
+	int keysLength;
+	/* ½ÓÊÜÊı¾İ»º³åÇø */
+	private ByteBuffer sendbuffer = ByteBuffer.allocate(BLOCK);
+	/* ·¢ËÍÊı¾İ»º³åÇø */
+	private ByteBuffer receivebuffer = ByteBuffer.allocate(BLOCK);
 
-    private static boolean threadFlag = false;
-    private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();;
+	private static boolean threadFlag = false;
+	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();;
 
-    public synchronized static boolean getThreadFlag() {
-        return threadFlag;
-    }
+	public synchronized static boolean getThreadFlag() {
+		return threadFlag;
+	}
 
-    private static void printKeyInfo(SelectionKey sk) {
-        System.out.println();
-        String s = new String();
-        s+=sk.toString()+"===";
-        s += ",read: " + sk.isReadable();
-        s += ", accept: " + sk.isAcceptable();
-        s += ", conn: " + sk.isConnectable();
-        s += ", write: " + sk.isWritable();
-        s += ", Valid: " + sk.isValid();
-        System.out.println("===" + s + "===");
-    }
+	private static void printKeyInfo(SelectionKey sk) {
+		System.out.println();
+		String s = new String();
+		s+=sk.toString()+"===";
+		s += ",read: " + sk.isReadable();
+		s += ", accept: " + sk.isAcceptable();
+		s += ", conn: " + sk.isConnectable();
+		s += ", write: " + sk.isWritable();
+		s += ", Valid: " + sk.isValid();
+		System.out.println("===" + s + "===");
+	}
 
-    public SocktNioServerDemo(int port) throws IOException {
-        // æ‰“å¼€æœåŠ¡å™¨å¥—æ¥å­—é€šé“
-        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-        // æœåŠ¡å™¨é…ç½®ä¸ºéé˜»å¡
-        serverSocketChannel.configureBlocking(false);
-        // æ£€ç´¢ä¸æ­¤é€šé“å…³è”çš„æœåŠ¡å™¨å¥—æ¥å­—
-        ServerSocket serverSocket = serverSocketChannel.socket();
-        // è¿›è¡ŒæœåŠ¡çš„ç»‘å®š
-        serverSocket.bind(new InetSocketAddress(port));
-        // é€šè¿‡open()æ–¹æ³•æ‰¾åˆ°Selector,Selectorå†…éƒ¨åŸç†å®é™…æ˜¯åœ¨åšä¸€ä¸ªå¯¹æ‰€æ³¨å†Œçš„channelçš„è½®è¯¢è®¿é—®
-        selector = Selector.open();
-        // å‘Selectoræ³¨å†ŒChannelåŠæˆ‘ä»¬æœ‰å…´è¶£çš„äº‹ä»¶,ç­‰å¾…è¿æ¥
-        SelectionKey s = serverSocketChannel.register(selector,
-                SelectionKey.OP_ACCEPT);
-        System.out.println("===æœåŠ¡å™¨SelectionKey===");
-        System.out.println("Server Start----8080:");
-        // System.out.println("now select count:"+selector.select());
-    }
+	public SocktNioServerDemo(int port) throws IOException {
+		// ´ò¿ª·şÎñÆ÷Ì×½Ó×ÖÍ¨µÀ
+		ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+		// ·şÎñÆ÷ÅäÖÃÎª·Ç×èÈû
+		serverSocketChannel.configureBlocking(false);
+		// ¼ìË÷Óë´ËÍ¨µÀ¹ØÁªµÄ·şÎñÆ÷Ì×½Ó×Ö
+		ServerSocket serverSocket = serverSocketChannel.socket();
+		// ½øĞĞ·şÎñµÄ°ó¶¨
+		serverSocket.bind(new InetSocketAddress(port));
+		// Í¨¹ıopen()·½·¨ÕÒµ½Selector,SelectorÄÚ²¿Ô­ÀíÊµ¼ÊÊÇÔÚ×öÒ»¸ö¶ÔËù×¢²áµÄchannelµÄÂÖÑ¯·ÃÎÊ
+		selector = Selector.open();
+		// ÏòSelector×¢²áChannel¼°ÎÒÃÇÓĞĞËÈ¤µÄÊÂ¼ş,µÈ´ıÁ¬½Ó
+		SelectionKey s = serverSocketChannel.register(selector,
+				SelectionKey.OP_ACCEPT);
+		System.out.println("===·şÎñÆ÷SelectionKey===");
+		System.out.println("Server Start----8080:");
+		// System.out.println("now select count:"+selector.select());
+	}
 
-    // ç›‘å¬
-    private void listen() throws IOException, InterruptedException {
-        while (true) {
-            // é€‰æ‹©ä¸€ç»„é”®ï¼Œå¹¶ä¸”ç›¸åº”çš„é€šé“å·²ç»æ‰“å¼€
-            try {
-                keysLength = selector.select();
-                System.out.println("1keysLength:" + keysLength);
-                for (SelectionKey key : selector.keys()) {
-                    printKeyInfo(key);
-                }
+	// ¼àÌı
+	private void listen() throws IOException, InterruptedException {
+		while (true) {
+			// Ñ¡ÔñÒ»×é¼ü£¬²¢ÇÒÏàÓ¦µÄÍ¨µÀÒÑ¾­´ò¿ª
+			try {
+  				keysLength = selector.select();
+				System.out.println("1keysLength:" + keysLength);
+				for (SelectionKey key : selector.keys()) {
+					printKeyInfo(key);
+				}
 
-                if (keysLength == 0) {
-                    continue;
-                } else if (keysLength > 0) {
+				if (keysLength == 0) {
+					continue;
+				} else if (keysLength > 0) {
 
-                    System.out.println("selectorå”¤é†’");
-                    // ReentrantReadWriteLock lock=new ReentrantReadWriteLock();
-                    // è¿”å›æ­¤é€‰æ‹©å™¨çš„å·²é€‰æ‹©é”®é›†ã€‚
+					System.out.println("selector»½ĞÑ");
+					// ReentrantReadWriteLock lock=new ReentrantReadWriteLock();
+					// ·µ»Ø´ËÑ¡ÔñÆ÷µÄÒÑÑ¡Ôñ¼ü¼¯¡£
 
-                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
-                    Iterator<SelectionKey> iterator = selectionKeys.iterator();
-                    while (iterator.hasNext()) {
-                        SelectionKey selectionKey = iterator.next();
-                        iterator.remove();
-                        if (selectionKey.isAcceptable()) {
-                            ServerSocketChannel server = null;
-                            SocketChannel client = null;
-                            server = (ServerSocketChannel) selectionKey
-                                    .channel();
-                            client = server.accept();
-                            System.out.println("æ¥æ”¶åˆ°æ¥è‡ªå®¢æˆ·ç«¯ï¼ˆ"
-                                    + client.socket().getInetAddress()
-                                            .getHostAddress() + "ï¼‰çš„è¿æ¥");
-                            client.configureBlocking(false);
-                            client.register(selector,SelectionKey.OP_READ);
-                        } else {
-                            Thread a = new Thread(new ServerClientThread(
-                                    selectionKey));
-                            a.start();
-                        }
-                    }
+					Set<SelectionKey> selectionKeys = selector.selectedKeys();
+					Iterator<SelectionKey> iterator = selectionKeys.iterator();
+					while (iterator.hasNext()) {
+						SelectionKey selectionKey = iterator.next();
+						iterator.remove();
+						if (selectionKey.isAcceptable()) {
+							ServerSocketChannel server = null;
+							SocketChannel client = null;
+							server = (ServerSocketChannel) selectionKey
+									.channel();
+							client = server.accept();
+							System.out.println("½ÓÊÕµ½À´×Ô¿Í»§¶Ë£¨"
+									+ client.socket().getInetAddress()
+											.getHostAddress() + "£©µÄÁ¬½Ó");
+							client.configureBlocking(false);
+							client.register(selector,SelectionKey.OP_READ);
+						} else {
+							Thread a = new Thread(new ServerClientThread(
+									selectionKey));
+							a.start();
+ 						}
+					}
 
-                }
-            } catch (Exception e) {
+				}
+			} catch (Exception e) {
 
-            } finally {
-            }
-        }
-    }
+			} finally {
+ 			}
+		}
+	}
 
-    public synchronized boolean containsKey(SelectionKey selectionKey) {
-        boolean returnflag = false;
-        Set<SelectionKey> selectionKeys = selector.selectedKeys();
-        Iterator<SelectionKey> iterator = selectionKeys.iterator();
-        while (iterator.hasNext()) {
-            SelectionKey selectionKey1 = iterator.next();
-            if (selectionKey == selectionKey1) {
-                returnflag = true;
-                break;
-            }
-        }
-        System.out.println("=========================" + returnflag);
-        return returnflag;
-    }
+	public synchronized boolean containsKey(SelectionKey selectionKey) {
+		boolean returnflag = false;
+		Set<SelectionKey> selectionKeys = selector.selectedKeys();
+		Iterator<SelectionKey> iterator = selectionKeys.iterator();
+		while (iterator.hasNext()) {
+			SelectionKey selectionKey1 = iterator.next();
+			if (selectionKey == selectionKey1) {
+				returnflag = true;
+				break;
+			}
+		}
+		System.out.println("=========================" + returnflag);
+		return returnflag;
+	}
 
-    public static void main(String[] args) throws Exception {
-        int port = 8080;
-        SocktNioServerDemo server = new SocktNioServerDemo(port);
-        server.listen();
-    }
+	public static void main(String[] args) throws Exception {
+		int port = 8080;
+		SocktNioServerDemo server = new SocktNioServerDemo(port);
+		server.listen();
+	}
 
 }

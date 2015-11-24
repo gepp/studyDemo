@@ -1,19 +1,19 @@
 package jdk2010.current.reentrant;
 
 public class Producter {
-    private Depot depot;
+	private Depot depot;
 
-    public Producter(Depot depot) {
-        this.depot = depot;
-    }
+	public Producter(Depot depot) {
+		this.depot = depot;
+	}
 
-    // æ¶ˆè´¹äº§å“ï¼šæ–°å»ºä¸€ä¸ªçº¿ç¨‹å‘ä»“åº“ä¸­ç”Ÿäº§äº§å“ã€‚
-    public void add(final int val) {
-        new Thread() {
-            public void run() {
-                System.out.println(Thread.currentThread().getName()+"æ–°å¢:"+val);
-                depot.add(val);
-            }
-        }.start();
-    }
+	// Ïû·Ñ²úÆ·£ºĞÂ½¨Ò»¸öÏß³ÌÏò²Ö¿âÖĞÉú²ú²úÆ·¡£
+	public void add(final int val) {
+		new Thread() {
+			public void run() {
+				System.out.println(Thread.currentThread().getName()+"ĞÂÔö:"+val);
+				depot.add(val);
+			}
+		}.start();
+	}
 }

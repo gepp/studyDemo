@@ -1,6 +1,6 @@
-ä¸ºä»€ä¹ˆ FileIinputstream æ¯”filereaderå¿«è¿™ä¹ˆå¤šï¼Ÿ
-FileIinputstream readä½¿ç”¨çš„æ˜¯private native int readBytes(byte b[], int off, int len) throws IOException;
-filereader ä½¿ç”¨çš„æ˜¯StreamDecoderçš„readæ–¹æ³•
+ÎªÊ²Ã´ FileIinputstream ±Èfilereader¿ìÕâÃ´¶à£¿
+FileIinputstream readÊ¹ÓÃµÄÊÇprivate native int readBytes(byte b[], int off, int len) throws IOException;
+filereader Ê¹ÓÃµÄÊÇStreamDecoderµÄread·½·¨
 public int read(char[] paramArrayOfChar, int paramInt1, int paramInt2)
     throws IOException
   {

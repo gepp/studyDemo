@@ -12,12 +12,12 @@ import java.util.Set;
  
 /**
  * http://www.cnblogs.com/xuekyo/archive/2013/01/20/2868547.html
- * ååº”å™¨æ¨¡å¼ ç”¨äºè§£å†³å¤šç”¨æˆ·è®¿é—®å¹¶å‘é—®é¢˜
+ * ·´Ó¦Æ÷Ä£Ê½ ÓÃÓÚ½â¾ö¶àÓÃ»§·ÃÎÊ²¢·¢ÎÊÌâ
  * 
- * ä¸¾ä¸ªä¾‹å­ï¼šé¤å…æœåŠ¡é—®é¢˜
+ * ¾Ù¸öÀı×Ó£º²ÍÌü·şÎñÎÊÌâ
  * 
- * ä¼ ç»Ÿçº¿ç¨‹æ± åšæ³•ï¼šæ¥ä¸€ä¸ªå®¢äºº(è¯·æ±‚)å»ä¸€ä¸ªæœåŠ¡å‘˜(çº¿ç¨‹)
- * ååº”å™¨æ¨¡å¼åšæ³•ï¼šå½“å®¢äººç‚¹èœçš„æ—¶å€™ï¼ŒæœåŠ¡å‘˜å°±å¯ä»¥å»æ‹›å‘¼å…¶ä»–å®¢äººäº†ï¼Œç­‰å®¢äººç‚¹å¥½äº†èœï¼Œç›´æ¥æ‹›å‘¼ä¸€å£°ï¼šæœåŠ¡å‘˜
+ * ´«Í³Ïß³Ì³Ø×ö·¨£ºÀ´Ò»¸ö¿ÍÈË(ÇëÇó)È¥Ò»¸ö·şÎñÔ±(Ïß³Ì)
+ * ·´Ó¦Æ÷Ä£Ê½×ö·¨£ºµ±¿ÍÈËµã²ËµÄÊ±ºò£¬·şÎñÔ±¾Í¿ÉÒÔÈ¥ÕĞºôÆäËû¿ÍÈËÁË£¬µÈ¿ÍÈËµãºÃÁË²Ë£¬Ö±½ÓÕĞºôÒ»Éù£º·şÎñÔ±
  * 
  * @author linxcool
  */
@@ -33,11 +33,11 @@ public class Reactor implements Runnable {
         serverSocketChannel.socket().bind(inetSocketAddress);
         serverSocketChannel.configureBlocking(false);
 
-        // å‘selectoræ³¨å†Œè¯¥channel
+        // Ïòselector×¢²á¸Ãchannel
         SelectionKey selectionKey = serverSocketChannel.register(selector,
                 SelectionKey.OP_ACCEPT);
-        System.out.println("ç³»ç»Ÿå¯åŠ¨...");
-        // åˆ©ç”¨selectionKeyçš„attacheåŠŸèƒ½ç»‘å®šAcceptor å¦‚æœæœ‰äº‹æƒ…ï¼Œè§¦å‘Acceptor
+        System.out.println("ÏµÍ³Æô¶¯...");
+        // ÀûÓÃselectionKeyµÄattache¹¦ÄÜ°ó¶¨Acceptor Èç¹ûÓĞÊÂÇé£¬´¥·¢Acceptor
         selectionKey.attach(new Acceptor(this));
     }
 
@@ -48,10 +48,10 @@ public class Reactor implements Runnable {
                 selector.select();
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 Iterator<SelectionKey> it = selectionKeys.iterator();
-                // Selectorå¦‚æœå‘ç°channelæœ‰OP_ACCEPTæˆ–READäº‹ä»¶å‘ç”Ÿï¼Œä¸‹åˆ—éå†å°±ä¼šè¿›è¡Œã€‚
+                // SelectorÈç¹û·¢ÏÖchannelÓĞOP_ACCEPT»òREADÊÂ¼ş·¢Éú£¬ÏÂÁĞ±éÀú¾Í»á½øĞĞ¡£
                 while (it.hasNext()) {
-                    // æ¥ä¸€ä¸ªäº‹ä»¶ ç¬¬ä¸€æ¬¡è§¦å‘ä¸€ä¸ªaccepterçº¿ç¨‹
-                    // ä»¥åè§¦å‘SocketReadHandler
+                    // À´Ò»¸öÊÂ¼ş µÚÒ»´Î´¥·¢Ò»¸öaccepterÏß³Ì
+                    // ÒÔºó´¥·¢SocketReadHandler
                     SelectionKey selectionKey = it.next();
                     dispatch(selectionKey);
                     selectionKeys.clear();
@@ -63,7 +63,7 @@ public class Reactor implements Runnable {
     }
 
     /**
-     * è¿è¡ŒAcceptoræˆ–SocketReadHandler
+     * ÔËĞĞAcceptor»òSocketReadHandler
      * 
      * @param key
      */

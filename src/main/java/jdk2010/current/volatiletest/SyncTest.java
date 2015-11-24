@@ -2,56 +2,56 @@ package jdk2010.current.volatiletest;
 import jdk2010.current.normal.RunTest1;
 
 public class SyncTest {
-        public static void main(String[] args) throws InterruptedException {
-//          int result=100;
-//          int maxLoop=100;
-//          int beginLoop=0;
-//          ThreadGroup tg=Thread.currentThread().getThreadGroup();
-//          while(beginLoop++<=maxLoop){
-//              SyncRunnable run=new SyncRunnable();
-//              for(int i=0;i<maxLoop;i++){
-//                   new Thread(run).start();
-//                   System.out.println("activeCount:"+tg.activeCount());
-//              }
-//              while(tg.activeCount()!=1){
-//                  
-//                  Thread.sleep(15);
-//              }
-//              if(run.getCount()!=result){
-//                  System.out.println("ç¬¬"+beginLoop+"æ¬¡ç»“æžœæœ‰é—®é¢˜,ç»“æžœä¸ºï¼š"+run.getCount());
-//              }
-//              
-//              
-//          }
-            
-            final ThreadGroup tg=Thread.currentThread().getThreadGroup();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        System.out.println("çº¿ç¨‹1");
-                        Thread.sleep(1000);
-                        System.out.println("activeCount1:"+tg.activeCount());
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        System.out.println("çº¿ç¨‹2");
-                        Thread.sleep(2000);
-                        System.out.println("activeCount2:"+tg.activeCount());
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-            System.out.println("activeCount:"+tg.activeCount());
-            
-        }
+		public static void main(String[] args) throws InterruptedException {
+//			int result=100;
+//			int maxLoop=100;
+//			int beginLoop=0;
+//			ThreadGroup tg=Thread.currentThread().getThreadGroup();
+//			while(beginLoop++<=maxLoop){
+//				SyncRunnable run=new SyncRunnable();
+//				for(int i=0;i<maxLoop;i++){
+//					 new Thread(run).start();
+//					 System.out.println("activeCount:"+tg.activeCount());
+//				}
+//				while(tg.activeCount()!=1){
+//					
+//					Thread.sleep(15);
+//				}
+//				if(run.getCount()!=result){
+//					System.out.println("µÚ"+beginLoop+"´Î½á¹ûÓÐÎÊÌâ,½á¹ûÎª£º"+run.getCount());
+//				}
+//				
+//				
+//			}
+			
+			final ThreadGroup tg=Thread.currentThread().getThreadGroup();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						System.out.println("Ïß³Ì1");
+						Thread.sleep(1000);
+						System.out.println("activeCount1:"+tg.activeCount());
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						System.out.println("Ïß³Ì2");
+						Thread.sleep(2000);
+						System.out.println("activeCount2:"+tg.activeCount());
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			System.out.println("activeCount:"+tg.activeCount());
+			
+		}
 }

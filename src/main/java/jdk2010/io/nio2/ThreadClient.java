@@ -12,54 +12,54 @@ import java.util.UUID;
 
 public class ThreadClient extends Thread {
 
-    private SocketChannel socketChannel;
-    private int current;
-    public ThreadClient (SocketChannel socket,int current) {
-        this.socketChannel = socket;
-        this.current=current;
-        System.out.println("å®¢æˆ·ç«¯å‘é€è¯·æ±‚----"+current);
-        start();
-    }
-    private static String receive(SocketChannel socketChannel) throws Exception {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int length = 0;
-        String username = "";
-        while ((length = socketChannel.read(buffer)) != -1) {
-            
-            buffer.flip();
-            username = username
-                    + Charset.forName("UTF-8").decode(buffer).toString();
-            buffer.clear();
-        }
+	private SocketChannel socketChannel;
+	private int current;
+	public ThreadClient (SocketChannel socket,int current) {
+		this.socketChannel = socket;
+		this.current=current;
+		System.out.println("¿Í»§¶Ë·¢ËÍÇëÇó----"+current);
+		start();
+	}
+	private static String receive(SocketChannel socketChannel) throws Exception {
+		ByteBuffer buffer = ByteBuffer.allocate(1024);
+		int length = 0;
+		String username = "";
+		while ((length = socketChannel.read(buffer)) != -1) {
+			
+			buffer.flip();
+			username = username
+					+ Charset.forName("UTF-8").decode(buffer).toString();
+			buffer.clear();
+		}
 
-        return username;
+		return username;
 
-    }
+	}
 
-    // å‘é€æ•°æ®
-    private static void send(String username, SocketChannel socketChannel)
-            throws Exception {
-        ByteBuffer buffer = ByteBuffer.wrap(username.getBytes("utf-8"));
-        socketChannel.write(buffer);
-        socketChannel.socket().shutdownOutput();
-    }
+	// ·¢ËÍÊı¾İ
+	private static void send(String username, SocketChannel socketChannel)
+			throws Exception {
+		ByteBuffer buffer = ByteBuffer.wrap(username.getBytes("utf-8"));
+		socketChannel.write(buffer);
+		socketChannel.socket().shutdownOutput();
+	}
 
-    @Override
-    public void run() {
-        try {
-             
-            socketChannel.connect(new InetSocketAddress("localhost", 8080));
-            ByteBuffer buffer = ByteBuffer.wrap((current+"").getBytes("utf-8"));
-            socketChannel.write(buffer);
-            socketChannel.socket().shutdownOutput();
-            String username = receive(socketChannel);
-            System.out.println("è¿”å›ï¼š"+username);
-            
+	@Override
+	public void run() {
+		try {
+			 
+			socketChannel.connect(new InetSocketAddress("localhost", 8080));
+			ByteBuffer buffer = ByteBuffer.wrap((current+"").getBytes("utf-8"));
+			socketChannel.write(buffer);
+			socketChannel.socket().shutdownOutput();
+			String username = receive(socketChannel);
+			System.out.println("·µ»Ø£º"+username);
+			
  
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-        } finally {
-         
-        }
-    }
+ 		} finally {
+		 
+		}
+	}
 }

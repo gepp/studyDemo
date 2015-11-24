@@ -9,188 +9,188 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
 public class ServerClientThread implements Runnable {
-    SelectionKey selectionKey;
-    static Selector selector;
+	SelectionKey selectionKey;
+	static Selector selector;
 
-    private static int BLOCK = 4096;
-    private static int flag = 0;
-    /* æ¥å—æ•°æ®ç¼“å†²åŒº */
-    private static ByteBuffer sendbuffer = ByteBuffer.allocate(BLOCK);
-    /* å‘é€æ•°æ®ç¼“å†²åŒº */
-    private static ByteBuffer receivebuffer = ByteBuffer.allocate(BLOCK);
+	private static int BLOCK = 4096;
+	private static int flag = 0;
+	/* ½ÓÊÜÊı¾İ»º³åÇø */
+	private static ByteBuffer sendbuffer = ByteBuffer.allocate(BLOCK);
+	/* ·¢ËÍÊı¾İ»º³åÇø */
+	private static ByteBuffer receivebuffer = ByteBuffer.allocate(BLOCK);
 
-    public ServerClientThread(SelectionKey selectionKey) throws IOException {
-        this.selectionKey = selectionKey;
-        this.selector = selectionKey.selector();
-        //System.out.println("select count ï¼š"+selectionKey.selector().select());
-        
-    }
+	public ServerClientThread(SelectionKey selectionKey) throws IOException {
+		this.selectionKey = selectionKey;
+		this.selector = selectionKey.selector();
+ 		//System.out.println("select count £º"+selectionKey.selector().select());
+		
+	}
 
-    @Override
-    public void run() {
-        handler(selectionKey);
-        // æµ‹è¯•æ­¤é”®çš„é€šé“æ˜¯å¦å·²å‡†å¤‡å¥½æ¥å—æ–°çš„å¥—æ¥å­—è¿æ¥ã€‚
+	@Override
+	public void run() {
+		handler(selectionKey);
+		// ²âÊÔ´Ë¼üµÄÍ¨µÀÊÇ·ñÒÑ×¼±¸ºÃ½ÓÊÜĞÂµÄÌ×½Ó×ÖÁ¬½Ó¡£
 
-    }
+	}
 
-    public static void handler(SelectionKey selectionKey) {
-        ServerSocketChannel server = null;
-        SocketChannel client = null;
-        String receiveText;
-        String sendText;
-        int count = 0;
-        System.out.println("================"+ Thread.currentThread().getName() + "running...");
-        if (selectionKey.isAcceptable()) {
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
-            
-            ThreadGroup group = Thread.currentThread().getThreadGroup();
-            Thread[] threads = new Thread[group.activeCount()];
-            System.out.println("å½“å‰çº¿ç¨‹æ€»æ•°:" + group.activeCount());
-            //group.enumerate(threads);
-            // for (Thread thread : threads) {
-            // if (thread == null) {
-            // continue;
-            // }
-            // StringBuffer buf = new StringBuffer();
-            // ThreadGroup tgroup = thread.getThreadGroup();
-            // String groupName = tgroup == null ? "null" : tgroup.getName();
-            // buf.append("CLIENTThreadGroup:").append(groupName).append(", ");
-            // buf.append("Id:").append(thread.getId()).append(", ");
-            // buf.append("Name:").append(thread.getName()).append(", ");
-            // buf.append("isDaemon:").append(thread.isDaemon()).append(", ");
-            // buf.append("isAlive:").append(thread.isAlive()).append(", ");
-            // buf.append("Priority:").append(thread.getPriority());
-            // System.out.println(buf.toString());
-            // }
-            server = (ServerSocketChannel) selectionKey.channel();
-            try {
-                // æ¥å—åˆ°æ­¤é€šé“å¥—æ¥å­—çš„è¿æ¥ã€‚
-                // æ­¤æ–¹æ³•è¿”å›çš„å¥—æ¥å­—é€šé“ï¼ˆå¦‚æœæœ‰ï¼‰å°†å¤„äºé˜»å¡æ¨¡å¼ã€‚
-                client = server.accept();
-                System.out.println("æ¥æ”¶åˆ°æ¥è‡ªå®¢æˆ·ç«¯ï¼ˆ"
-                        + client.socket().getInetAddress().getHostAddress()
-                        + "ï¼‰çš„è¿æ¥");
-                // é…ç½®ä¸ºéé˜»å¡
-                client.configureBlocking(false);
-//              selectionKey.cancel();
-                // æ³¨å†Œåˆ°selectorï¼Œç­‰å¾…è¿æ¥
-                // System.out.println("selector-before:"+selector.select());
-//              SelectionKey key = client.register(selector,
-//                      SelectionKey.OP_READ);
-                //client = (SocketChannel) selectionKey.channel();
-                // å°†ç¼“å†²åŒºæ¸…ç©ºä»¥å¤‡ä¸‹æ¬¡è¯»å–
-                receivebuffer.clear();
-                // è¯»å–æœåŠ¡å™¨å‘é€æ¥çš„æ•°æ®åˆ°ç¼“å†²åŒºä¸­
-                try {
-                    count = client.read(receivebuffer);
-                    if (count > 0) {
-                        receiveText = new String(receivebuffer.array(), 0, count);
-                        System.out.println("æœåŠ¡å™¨ç«¯æ¥å—å®¢æˆ·ç«¯æ•°æ®--:" + receiveText);
-                    //  client.register(selector, SelectionKey.OP_WRITE, receiveText);
-                    } else {
-                        System.out.println("readè¿æ¥å…³é—­");
-                        //client.close();
-                    }
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                
-                
-                 
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            System.out.println("writeç»“æŸ,å½“å‰çº¿ç¨‹ï¼š"
-                    + Thread.currentThread().getName());
-            // å°†ç¼“å†²åŒºæ¸…ç©ºä»¥å¤‡ä¸‹æ¬¡å†™å…¥
-            sendbuffer.clear();
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
-            //client = (SocketChannel) selectionKey.channel();
-            sendText = "message from server--" + flag++;
-            // å‘ç¼“å†²åŒºä¸­è¾“å…¥æ•°æ®
-            sendbuffer.put(sendText.getBytes());
-            // å°†ç¼“å†²åŒºå„æ ‡å¿—å¤ä½,å› ä¸ºå‘é‡Œé¢putäº†æ•°æ®æ ‡å¿—è¢«æ”¹å˜è¦æƒ³ä»ä¸­è¯»å–æ•°æ®å‘å‘æœåŠ¡å™¨,å°±è¦å¤ä½
-            sendbuffer.flip();
-            // è¾“å‡ºåˆ°é€šé“
-            try {
-                client.write(sendbuffer);
-                System.out.println("æœåŠ¡å™¨ç«¯å‘å®¢æˆ·ç«¯å‘é€æ•°æ®--ï¼š" + sendText);
-                client.close();
+	public static void handler(SelectionKey selectionKey) {
+		ServerSocketChannel server = null;
+		SocketChannel client = null;
+		String receiveText;
+		String sendText;
+		int count = 0;
+		System.out.println("================"+ Thread.currentThread().getName() + "running...");
+		if (selectionKey.isAcceptable()) {
+			// ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
+			
+			ThreadGroup group = Thread.currentThread().getThreadGroup();
+			Thread[] threads = new Thread[group.activeCount()];
+			System.out.println("µ±Ç°Ïß³Ì×ÜÊı:" + group.activeCount());
+			//group.enumerate(threads);
+			// for (Thread thread : threads) {
+			// if (thread == null) {
+			// continue;
+			// }
+			// StringBuffer buf = new StringBuffer();
+			// ThreadGroup tgroup = thread.getThreadGroup();
+			// String groupName = tgroup == null ? "null" : tgroup.getName();
+			// buf.append("CLIENTThreadGroup:").append(groupName).append(", ");
+			// buf.append("Id:").append(thread.getId()).append(", ");
+			// buf.append("Name:").append(thread.getName()).append(", ");
+			// buf.append("isDaemon:").append(thread.isDaemon()).append(", ");
+			// buf.append("isAlive:").append(thread.isAlive()).append(", ");
+			// buf.append("Priority:").append(thread.getPriority());
+			// System.out.println(buf.toString());
+			// }
+			server = (ServerSocketChannel) selectionKey.channel();
+			try {
+				// ½ÓÊÜµ½´ËÍ¨µÀÌ×½Ó×ÖµÄÁ¬½Ó¡£
+				// ´Ë·½·¨·µ»ØµÄÌ×½Ó×ÖÍ¨µÀ£¨Èç¹ûÓĞ£©½«´¦ÓÚ×èÈûÄ£Ê½¡£
+				client = server.accept();
+				System.out.println("½ÓÊÕµ½À´×Ô¿Í»§¶Ë£¨"
+						+ client.socket().getInetAddress().getHostAddress()
+						+ "£©µÄÁ¬½Ó");
+				// ÅäÖÃÎª·Ç×èÈû
+				client.configureBlocking(false);
+//				selectionKey.cancel();
+				// ×¢²áµ½selector£¬µÈ´ıÁ¬½Ó
+ 				// System.out.println("selector-before:"+selector.select());
+//				SelectionKey key = client.register(selector,
+//						SelectionKey.OP_READ);
+ 				//client = (SocketChannel) selectionKey.channel();
+				// ½«»º³åÇøÇå¿ÕÒÔ±¸ÏÂ´Î¶ÁÈ¡
+				receivebuffer.clear();
+				// ¶ÁÈ¡·şÎñÆ÷·¢ËÍÀ´µÄÊı¾İµ½»º³åÇøÖĞ
+				try {
+					count = client.read(receivebuffer);
+					if (count > 0) {
+						receiveText = new String(receivebuffer.array(), 0, count);
+						System.out.println("·şÎñÆ÷¶Ë½ÓÊÜ¿Í»§¶ËÊı¾İ--:" + receiveText);
+					//	client.register(selector, SelectionKey.OP_WRITE, receiveText);
+					} else {
+						System.out.println("readÁ¬½Ó¹Ø±Õ");
+						//client.close();
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			     
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("write½áÊø,µ±Ç°Ïß³Ì£º"
+					+ Thread.currentThread().getName());
+			// ½«»º³åÇøÇå¿ÕÒÔ±¸ÏÂ´ÎĞ´Èë
+			sendbuffer.clear();
+			// ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
+			//client = (SocketChannel) selectionKey.channel();
+			sendText = "message from server--" + flag++;
+			// Ïò»º³åÇøÖĞÊäÈëÊı¾İ
+			sendbuffer.put(sendText.getBytes());
+			// ½«»º³åÇø¸÷±êÖ¾¸´Î»,ÒòÎªÏòÀïÃæputÁËÊı¾İ±êÖ¾±»¸Ä±äÒªÏë´ÓÖĞ¶ÁÈ¡Êı¾İ·¢Ïò·şÎñÆ÷,¾ÍÒª¸´Î»
+			sendbuffer.flip();
+			// Êä³öµ½Í¨µÀ
+			try {
+				client.write(sendbuffer);
+				System.out.println("·şÎñÆ÷¶ËÏò¿Í»§¶Ë·¢ËÍÊı¾İ--£º" + sendText);
+				client.close();
 
-                //client.register(selector, SelectionKey.OP_READ);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            //selectionKey.cancel();
-        } else if (selectionKey.isReadable()) {
-            System.out.println("acceptç»“æŸ,å½“å‰çº¿ç¨‹ï¼š"
-                    + Thread.currentThread().getName());
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
-            client = (SocketChannel) selectionKey.channel();
-            // å°†ç¼“å†²åŒºæ¸…ç©ºä»¥å¤‡ä¸‹æ¬¡è¯»å–
-            receivebuffer.clear();
-            // è¯»å–æœåŠ¡å™¨å‘é€æ¥çš„æ•°æ®åˆ°ç¼“å†²åŒºä¸­
-            try {
-                count = client.read(receivebuffer);
+				//client.register(selector, SelectionKey.OP_READ);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//selectionKey.cancel();
+		} else if (selectionKey.isReadable()) {
+			System.out.println("accept½áÊø,µ±Ç°Ïß³Ì£º"
+					+ Thread.currentThread().getName());
+			// ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
+			client = (SocketChannel) selectionKey.channel();
+			// ½«»º³åÇøÇå¿ÕÒÔ±¸ÏÂ´Î¶ÁÈ¡
+			receivebuffer.clear();
+			// ¶ÁÈ¡·şÎñÆ÷·¢ËÍÀ´µÄÊı¾İµ½»º³åÇøÖĞ
+			try {
+				count = client.read(receivebuffer);
 
-                if (count > 0) {
-                    receiveText = new String(receivebuffer.array(), 0, count);
-                    System.out.println("æœåŠ¡å™¨ç«¯æ¥å—å®¢æˆ·ç«¯æ•°æ®--:" + receiveText);
-                    client.register(selector, SelectionKey.OP_WRITE,
-                            receiveText);
-                } else {
-                    System.out.println("readè¿æ¥å…³é—­");
-                    client.close();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } else if (selectionKey.isWritable()) {
-            System.out.println("writeç»“æŸ,å½“å‰çº¿ç¨‹ï¼š"
-                    + Thread.currentThread().getName());
-            // å°†ç¼“å†²åŒºæ¸…ç©ºä»¥å¤‡ä¸‹æ¬¡å†™å…¥
-            sendbuffer.clear();
-            // è¿”å›ä¸ºä¹‹åˆ›å»ºæ­¤é”®çš„é€šé“ã€‚
-            client = (SocketChannel) selectionKey.channel();
-            sendText = "message from server--" + flag++;
-            // å‘ç¼“å†²åŒºä¸­è¾“å…¥æ•°æ®
-            sendbuffer.put(sendText.getBytes());
-            // å°†ç¼“å†²åŒºå„æ ‡å¿—å¤ä½,å› ä¸ºå‘é‡Œé¢putäº†æ•°æ®æ ‡å¿—è¢«æ”¹å˜è¦æƒ³ä»ä¸­è¯»å–æ•°æ®å‘å‘æœåŠ¡å™¨,å°±è¦å¤ä½
-            sendbuffer.flip();
-            // è¾“å‡ºåˆ°é€šé“
-            try {
-                client.write(sendbuffer);
+				if (count > 0) {
+					receiveText = new String(receivebuffer.array(), 0, count);
+					System.out.println("·şÎñÆ÷¶Ë½ÓÊÜ¿Í»§¶ËÊı¾İ--:" + receiveText);
+					client.register(selector, SelectionKey.OP_WRITE,
+							receiveText);
+				} else {
+					System.out.println("readÁ¬½Ó¹Ø±Õ");
+					client.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (selectionKey.isWritable()) {
+			System.out.println("write½áÊø,µ±Ç°Ïß³Ì£º"
+					+ Thread.currentThread().getName());
+			// ½«»º³åÇøÇå¿ÕÒÔ±¸ÏÂ´ÎĞ´Èë
+			sendbuffer.clear();
+			// ·µ»ØÎªÖ®´´½¨´Ë¼üµÄÍ¨µÀ¡£
+			client = (SocketChannel) selectionKey.channel();
+			sendText = "message from server--" + flag++;
+			// Ïò»º³åÇøÖĞÊäÈëÊı¾İ
+			sendbuffer.put(sendText.getBytes());
+			// ½«»º³åÇø¸÷±êÖ¾¸´Î»,ÒòÎªÏòÀïÃæputÁËÊı¾İ±êÖ¾±»¸Ä±äÒªÏë´ÓÖĞ¶ÁÈ¡Êı¾İ·¢Ïò·şÎñÆ÷,¾ÍÒª¸´Î»
+			sendbuffer.flip();
+			// Êä³öµ½Í¨µÀ
+			try {
+				client.write(sendbuffer);
 
-                System.out.println("æœåŠ¡å™¨ç«¯å‘å®¢æˆ·ç«¯å‘é€æ•°æ®--ï¼š" + sendText);
-                client.close();
+				System.out.println("·şÎñÆ÷¶ËÏò¿Í»§¶Ë·¢ËÍÊı¾İ--£º" + sendText);
+				client.close();
 
-                //client.register(selector, SelectionKey.OP_READ);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } else if (selectionKey.isConnectable()) {
+				//client.register(selector, SelectionKey.OP_READ);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (selectionKey.isConnectable()) {
 
-            // è¾“å…¥ç»“æŸï¼Œå…³é—­ socketChannel
-            System.out.println("connectable");
-            try {
-                client.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("å…¶ä»–");
-        }
+			// ÊäÈë½áÊø£¬¹Ø±Õ socketChannel
+			System.out.println("connectable");
+			try {
+				client.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("ÆäËû");
+		}
 
-    }
-    
-    public static void read(SelectionKey selectionKey){
-        
-    }
+	}
+	
+	public static void read(SelectionKey selectionKey){
+		
+	}
 
 }

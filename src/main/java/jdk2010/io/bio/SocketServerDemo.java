@@ -8,16 +8,14 @@ import java.net.Socket;
 import java.util.UUID;
 
 public class SocketServerDemo {
-    public static void main(String[] args) throws IOException {
-        ServerSocket server=new ServerSocket(9999);
-        System.out.println("Á≥ªÁªüÂêØÂä®===");
-        while(true){
-            Socket client=null;
-            
-            client=server.accept();
-           
-            System.out.println("abc");
-            new ThreadServerClient(client);
-        }
-    }
+	public static void main(String[] args) throws IOException {
+		ServerSocket server=new ServerSocket(8080);
+		System.out.println("œµÕ≥∆Ù∂Ø===");
+		while(true){
+			Socket client=null;
+		    client=server.accept();
+ 		    new ThreadServerClient(client);
+ 		  
+		}
+	}
 }
