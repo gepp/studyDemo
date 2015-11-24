@@ -1,7 +1,5 @@
 package jdk2010.mianshi.question1;
 
-import java.util.Map;
-
 public class MyThread0 extends Thread {
 
     private static int currentCount = 0;
@@ -13,34 +11,25 @@ public class MyThread0 extends Thread {
     @Override
     public void run() {
         while (currentCount < 30) {
-            switch (currentCount % 3) {
-                case 0:
-                    if ("A".equals(getName())) {
-                        System.out.println(currentCount + getName());
-                        if ("C".equals(getName())) {
-                            System.out.println();
-                        }
-                        currentCount++;
-                    }
-                    break;
-                case 1:
-                    if ("B".equals(getName())) {
-                        System.out.println(getName());
-                        if ("C".equals(getName())) {
-                            System.out.println();
-                        }
-                        currentCount++;
-                    }
-                    break;
-                case 2:
-                    if ("C".equals(getName())) {
-                        System.out.println(getName());
-                        if ("C".equals(getName())) {
-                            System.out.println();
-                        }
-                        currentCount++;
-                    }
-                    break;
+             System.out.println("========"+Thread.currentThread().getName());
+            if (currentCount % 3 == 0) {
+                if ("A".equals(getName())) {
+                    System.out.println("A");
+                    currentCount++;
+                }
+            }
+            if (currentCount % 3 == 1) {
+                if ("B".equals(getName())) {
+                    System.out.println("B");
+                    currentCount++;
+                }
+            }
+            if (currentCount % 3 == 2) {
+                if ("C".equals(getName())) {
+                    System.out.println("C");
+                    System.out.println("");
+                    currentCount++;
+                }
             }
         }
 
@@ -48,7 +37,6 @@ public class MyThread0 extends Thread {
 
     public static void main(String[] args) throws InterruptedException {
 
-        long startTime = System.currentTimeMillis();
         new MyThread0("A").start();
         new MyThread0("B").start();
         new MyThread0("C").start();
