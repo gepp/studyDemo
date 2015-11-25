@@ -1,25 +1,27 @@
 package jdk2010.current.atomic.test1;
 
-public class SyncThread implements Runnable{
-    
-    static final int  maxCount=10000;
-    
-    int count=0;
-    
+public class SyncThread implements Runnable {
+
+    int maxCount;
+    long starttime;
     AtomicIntegerSyncTest test;
-    
-    public SyncThread(AtomicIntegerSyncTest test){
-        this.test=test;
+
+    public SyncThread(AtomicIntegerSyncTest test, long starttime, int maxCount) {
+        this.test = test;
+        this.starttime = starttime;
+        this.maxCount = maxCount;
     }
-    
+
     @Override
     public void run() {
-        while(test.getCount()<maxCount){
-             test.add();
-             
+        int v = test.getCount();
+        while (v < maxCount) {
+            v = test.setCount();
         }
-        
-        
+        long endtime = System.currentTimeMillis();
+        System.out.println(Thread.currentThread().getName() + "====SyncThread spend:" + (endtime - starttime) + "ms"
+                + " v=" + v);
+
     }
 
 }
