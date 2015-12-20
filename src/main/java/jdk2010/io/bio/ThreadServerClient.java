@@ -35,7 +35,7 @@ public class ThreadServerClient extends Thread {
 //			}else if(s.equals("2")){
 //				Thread.sleep(1000);
 //			}
-			 out.write((s+":"+UUID.randomUUID().toString()).getBytes());
+			 out.write(s.getBytes());
 			 out.close();
 			 in.close();
  

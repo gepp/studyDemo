@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class SocketServerDemo {
 	public static void main(String[] args) throws IOException {
-		ServerSocket server=new ServerSocket(8080);
+		ServerSocket server=new ServerSocket(9001);
 		System.out.println("ÏµÍ³Æô¶¯===");
 		while(true){
 			Socket client=null;
