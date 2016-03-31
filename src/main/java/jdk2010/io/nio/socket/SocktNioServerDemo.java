@@ -42,7 +42,7 @@ public class SocktNioServerDemo {
         //向Selector注册Channel及我们有兴趣的事件,等待连接
         SelectionKey s = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
         System.out.println("===服务器SelectionKey===");
-         System.out.println("Server Start----8080:");
+        System.out.println("Server Start----8080:");
     }
     
     
