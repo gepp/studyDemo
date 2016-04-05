@@ -15,64 +15,65 @@ import java.util.concurrent.Executors;
 
 public class NioServer4 {
 
-    private static  Selector select;
+    private static Selector select;
+
+    private static ByteBuffer sendBuf;
+
+    public static synchronized Selector getSelect() {
+        return select;
+    }
 
     public static void init() throws IOException {
+        sendBuf = ByteBuffer.allocateDirect(1024);
         select = Selector.open();
-    }
-    
-    public static synchronized Set<SelectionKey> getSelectionKey(){
-        return select.selectedKeys();
+        ServerSocketChannel channel = ServerSocketChannel.open();
+        channel.socket().bind(new InetSocketAddress("localhost", 9999));
+        channel.configureBlocking(false);
+        channel.register(select, SelectionKey.OP_ACCEPT);
+        System.out.println(Thread.currentThread().getName() + "服务器启动===================");
     }
 
     public static void main(String[] args) throws IOException {
         init();
 
-        ServerSocketChannel channel = ServerSocketChannel.open();
-        channel.socket().bind(new InetSocketAddress("localhost", 9999));
-        channel.configureBlocking(false);
+        final Executor executor = Executors.newFixedThreadPool(5);
 
-        channel.register(select, SelectionKey.OP_ACCEPT);
-        System.out.println(Thread.currentThread().getName() + "服务器启动===================");
-        
-        final Executor executor=Executors.newFixedThreadPool(5);
-        
-        
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    int keys = 0;
+                    Integer keys = 0;
                     try {
-                        keys = select.select();
+                        keys = select.select(1);
                         if (keys > 0) {
-                            Set<SelectionKey> selectionKeys = getSelectionKey();
+                            Set<SelectionKey> selectionKeys = select.selectedKeys();
                             Iterator<SelectionKey> iterator = selectionKeys.iterator();
                             while (iterator.hasNext()) {
                                 SelectionKey key = iterator.next();
                                 iterator.remove();
-                                if (key.isAcceptable()) {
-                                    ServerSocketChannel server = (ServerSocketChannel) key.channel();
-                                    SocketChannel clientChannel;
-                                    try {
-                                        clientChannel = server.accept();
-                                        clientChannel.configureBlocking(false);
-                                        clientChannel.register(key.selector(), SelectionKey.OP_READ);
-                                    } catch (IOException e) {
-                                        // TODO Auto-generated catch block
-                                        e.printStackTrace();
+                                if (!key.isValid()) {
+                                    continue;
+                                }
+                                try{
+                                    if (key.isAcceptable()) {
+//                                         executor.execute(new AcceptRunable(key));
+                                        new AcceptRunable(key).run();
+                                        //new Thread(new AcceptRunable(key)).start();
+                                    } else if (key.isReadable()) {
+                                        executor.execute(new ReadRunnable(key));
+                                        // executor.execute(new WriteRunnable(key));
+                                    } else if (key.isWritable()) {
+                                        executor.execute(new WriteRunnable(key));
                                     }
-                                } else   {
-                                    executor.execute(new HandlerRunnable(key));
-                                    //SelectionKey.cancel只对下一次的Selector.cancel()有效
-                                    key.cancel(); 
-                                }  
-                                    
-                               
+                                }catch (Exception e) {
+                                    key.cancel();
+                                }
+                                // key.cancel();
+                                // select.wakeup();
                             }
                         }
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
+                        
                         e.printStackTrace();
                     }
                 }
