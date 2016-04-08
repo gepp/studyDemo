@@ -24,6 +24,8 @@ public class BioRunnable implements Runnable {
 
         try {
             socket = new Socket("localhost", port);
+            socket.setSoTimeout(5000);
+            socket.setSoLinger(true, 0); 
             System.out.println("·¢ËÍ" + Thread.currentThread().getName());
             out = socket.getOutputStream();
             out.write("<xml>aaa</xml>".getBytes());
@@ -37,7 +39,7 @@ public class BioRunnable implements Runnable {
             }
             out.close();
             in.close();
-            socket.close();
+            //socket.close();
             latch.countDown();
         } catch (IOException e) {
             try {

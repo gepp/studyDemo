@@ -8,40 +8,48 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
-public class ReadRunnable implements Runnable {
+public class ReadAndWriteRunnable implements Runnable {
     SelectionKey key;
 
-    public ReadRunnable(SelectionKey key) {
+    public ReadAndWriteRunnable(SelectionKey key) {
         this.key = key;
     }
 
     @Override
     public void run() {
         if (key.isValid()) {
-            //ByteBuffer readBuffer = (ByteBuffer) key.attachment();
-//            System.out.println(Thread.currentThread().getName() + "====Ω¯»Î∂¡====");
             SocketChannel clientChannel = (SocketChannel) key.channel();
             if (clientChannel.isConnected() && clientChannel != null) {
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
                 int length = 0;
                 try {
-                    
-                    while ((length = clientChannel.read(buffer)) != 0) {
+                    String fromMessage="";
+                    while ((length = clientChannel.read(buffer)) > 0) {
                         System.out.println("length:"+length);
                         buffer.flip();
-                        System.out.println(new String(buffer.array(), 0, length));
+                        fromMessage=fromMessage+new String(buffer.array(), 0, length);
                         //readBuffer.put(buffer);
                         buffer.clear();
                     }
-                    clientChannel.register(NioServer4.getSelect(), SelectionKey.OP_WRITE);
+                    if(!fromMessage.equals("")){
+                        String returnData="server back:"+fromMessage+"\n";
+                        System.out.println(Thread.currentThread().getName()+"message from client:" + fromMessage);
+                        clientChannel.write(ByteBuffer.wrap(returnData.getBytes()));
+                       // clientChannel.close();
+                    }
+                    
+                    
                 }
                 catch (ClosedChannelException e ) {
                     //System.out.println("read ß∞‹");
-                    //e.printStackTrace();
+                    e.printStackTrace();
                     key.cancel();
                 }
                 catch (IOException e) {
                     // TODO: handle exception
+                }finally{
+                    buffer.flip();
+                    buffer.clear();
                 }
             }
         }

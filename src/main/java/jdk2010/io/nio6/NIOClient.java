@@ -1,4 +1,4 @@
-package jdk2010.io.nio4;
+package jdk2010.io.nio6;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 
-public class Nio4Client {  
+public class NIOClient {  
     
     /** 
      * @param args 
@@ -31,7 +31,6 @@ public class Nio4Client {
           
         while(true){  
             if(channel.isConnected()){  
-                System.out.println("connected1");
                 String command=systemIn.readLine();  
                 channel.write(Charset.forName("UTF-8").encode(command));  
                   
@@ -47,13 +46,11 @@ public class Nio4Client {
             if(nKeys>0){  
                 for(SelectionKey key:selector.selectedKeys()){  
                     if(key.isConnectable()){  
-                        System.out.println("connected2");
                         SocketChannel sc=(SocketChannel) key.channel();  
                         sc.configureBlocking(false);  
                         sc.register(selector, SelectionKey.OP_READ);  
                         sc.finishConnect();  
                     }else if(key.isReadable()){  
-                        System.out.println("read");
                         ByteBuffer buffer=ByteBuffer.allocate(1024);  
                         SocketChannel sc=(SocketChannel) key.channel();  
                         int readBytes=0;  

@@ -1,6 +1,7 @@
 package jdk2010.io.nio4;
 
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
@@ -8,32 +9,34 @@ import java.nio.channels.SocketChannel;
 
 public class WriteRunnable implements Runnable {
     SelectionKey key;
+    String msg;
 
-    public WriteRunnable(SelectionKey key) {
+    public WriteRunnable(SelectionKey key, String msg) {
         this.key = key;
+        this.msg = msg;
     }
 
     @Override
     public void run() {
         if (key.isValid()) {
-            //System.out.println(Thread.currentThread().getName() + "====进入写====");
-            ByteBuffer buffer = ByteBuffer.wrap("return data aaaaaaa".getBytes());
+            // ByteBuffer writebuffer = (ByteBuffer) key.attachment();
+            // System.out.println(Thread.currentThread().getName() + "====进入写====");
             SocketChannel clientChannel = (SocketChannel) key.channel();
             try {
+                System.out.println("msg待发送:"+msg);
                 if (clientChannel.isOpen() && clientChannel != null) {
-                    buffer.clear();
-                    clientChannel.write(buffer);
-                    buffer.flip();
-                    clientChannel.close();
+                    clientChannel.write(ByteBuffer.wrap(msg.getBytes()));
                 }
-//                key.cancel();
-            } catch (ClosedChannelException e ) {
-               // System.out.println("read失败");
-                //e.printStackTrace();
+                // key.cancel();
+            } catch (ClosedChannelException e) {
+                // System.out.println("read失败");
+                e.printStackTrace();
                 key.cancel();
-            }
-            catch (IOException e) {
-                // TODO: handle exception
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                // System.out.println("clientChannel.isConnected():"+clientChannel.isConnected());
             }
         }
     }
