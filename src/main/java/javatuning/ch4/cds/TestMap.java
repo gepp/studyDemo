@@ -96,7 +96,7 @@ public class TestMap {
 		Thread.sleep(10000);
 	}
 
-	//@Test
+	@Test
 	public void testHashMap() throws InterruptedException {
 		initHashMap();
 		CounterPoolExecutor exe=new CounterPoolExecutor(MAX_THREADS, MAX_THREADS,

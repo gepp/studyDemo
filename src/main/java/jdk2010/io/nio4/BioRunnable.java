@@ -28,8 +28,9 @@ public class BioRunnable implements Runnable {
             socket.setSoLinger(true, 0); 
             System.out.println("·¢ËÍ" + Thread.currentThread().getName());
             out = socket.getOutputStream();
-            out.write("<xml>aaa</xml>".getBytes());
+            out.write("<xml>aaa</xml>1\r\n".getBytes());
             out.flush();
+            out.write("<xml>aaa</xml>2".getBytes());
             socket.shutdownOutput();
             in = socket.getInputStream();
             byte[] b = new byte[1024];

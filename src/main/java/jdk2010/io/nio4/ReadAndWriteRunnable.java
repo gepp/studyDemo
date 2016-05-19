@@ -23,6 +23,7 @@ public class ReadAndWriteRunnable implements Runnable {
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
                 int length = 0;
                 try {
+                    clientChannel.socket().sendUrgentData(0xFF);
                     String fromMessage="";
                     while ((length = clientChannel.read(buffer)) > 0) {
                         System.out.println("length:"+length);

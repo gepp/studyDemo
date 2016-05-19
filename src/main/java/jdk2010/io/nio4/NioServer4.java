@@ -89,10 +89,7 @@ public class NioServer4 {
                                         executor.execute(new ReadAndWriteRunnable(key));
                                         // key.interestOps(key.interestOps() & (~SelectionKey.OP_READ));
                                         // executor.execute(new WriteRunnable(key));
-                                    } else if (key.isWritable()) {
-                                        System.out.println("write");
-                                        executor.execute(new WriteRunnable(key, msg));
-                                    } else {
+                                    }  else {
                                         System.out.println("else");
                                     }
                                 } catch (Exception e) {

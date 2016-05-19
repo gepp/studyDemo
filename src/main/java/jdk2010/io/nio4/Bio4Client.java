@@ -13,7 +13,7 @@ public class Bio4Client {
 
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
         long start=System.currentTimeMillis();
-        int totalCount=1000;
+        int totalCount=5;
         CountDownLatch latch=new CountDownLatch(totalCount);
         ExecutorService service=Executors.newFixedThreadPool(5);
         for(int i=0;i<totalCount;i++){
