@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
 
-public class ReflectTest {
+public class ReflectTest02 {
 	public static void main(String[] args) throws Throwable {
 
 		Student s1 = new Student(1, "gpp");
@@ -42,6 +42,8 @@ public class ReflectTest {
 		start = System.currentTimeMillis();
 
 		Method m1 = Student.class.getMethod("getName", parameterTypes);
+		// 关闭权限检查
+		m1.setAccessible(true);
 
 		for (int i = 0; i < 100000000; i++) {
 
