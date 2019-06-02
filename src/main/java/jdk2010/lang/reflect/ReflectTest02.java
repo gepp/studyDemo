@@ -2,7 +2,7 @@ package jdk2010.lang.reflect;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
@@ -69,19 +69,26 @@ public class ReflectTest02 {
 
 		System.out.println("reflectasm∑¥…‰(ª∫¥ÊMethod) 100000000 times using:" + (end - start) + "ms");
 
+		Field f1=Student.class.getDeclaredField("name");
+		f1.setAccessible(true);
 		MethodHandles.Lookup lookup = MethodHandles.lookup();
 
-		MethodHandle methodHandle = lookup.findVirtual(Student.class, "getName", MethodType.methodType(String.class));
+		// MethodHandle methodHandle = lookup.findVirtual(Student.class,
+		// "getName", MethodType.methodType(String.class));
+//		MethodHandle methodHandle = lookup.unreflect(m1);
+		MethodHandle methodHandle = lookup.findGetter(Student.class,"name", String.class);
 		
-		MethodHandle methodHandle2 = lookup.findVirtual(Student.class, "setName", MethodType.methodType(void.class, String.class));
+		//MethodHandle methodHandle = lookup.findGetter(Student.class,"name", String.class);
+		// MethodHandle methodHandle2 = lookup.findVirtual(Student.class,
+		// "setName", MethodType.methodType(void.class, String.class));
 
 		start = System.currentTimeMillis();
 
 		for (int i = 0; i < 100000000; i++) {
 
 			methodHandle.invoke(s1);
-//			methodHandle2.invokeExact(s1);
-//			methodHandle2.invokeExact(s1,"aaa");
+			// methodHandle2.invokeExact(s1);
+			// methodHandle2.invokeExact(s1,"aaa");
 			// methodHandle.invokeExact();
 
 		}
