@@ -1,0 +1,4 @@
+Mainfest-Version: 1.0
+Premain-Class: jdk2010.lang.instrumentation.javaagent.PreMainTraceAgent
+Can-Redine-Classes: true
+Can-Retransform-Classes: true 
