@@ -1,4 +1,4 @@
-package jdk2010.util.stream;
+package jdk2010.util.function;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,6 +8,7 @@ public class StreamUtil {
 			"Andy Murray", "Tomas Berdych", "Juan Martin Del Potro" };
 
 	public static void main(String[] args) {
+	
 		List<String> players = Arrays.asList(atp);
 		// 以前的循环方式
 		// for (String player : players) {

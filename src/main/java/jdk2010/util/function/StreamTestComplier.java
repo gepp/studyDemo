@@ -1,4 +1,4 @@
-package jdk2010.util.stream;
+package jdk2010.util.function;
 
 import java.util.Arrays;
 import java.util.List;
